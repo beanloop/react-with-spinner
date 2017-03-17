@@ -1,0 +1,62 @@
+exports[`withSpinner should ignore errors if handleError is false 1`] = `
+<DisplayComponent
+  data={
+    Object {
+      "error": true,
+      "loading": false,
+    }
+  } />
+`;
+
+exports[`withSpinner should not render errorComponent if skipErrors returns true 1`] = `
+<div>
+  Validation error occured on field: 
+  password
+   with message: 
+  Wrong password
+</div>
+`;
+
+exports[`withSpinner should not render spinner if loading is false 1`] = `
+<div>
+  loading: 
+  false
+</div>
+`;
+
+exports[`withSpinner should render passed errorComponent if error exists 1`] = `<ErrorComponent />`;
+
+exports[`withSpinner should render passed spinnerComponent 1`] = `<Loading />`;
+
+exports[`withSpinner should render spinner if loading is true 1`] = `<ToolboxSpinner />`;
+
+exports[`withSpinner should render spinner in 100 ms and after render component 1`] = `
+<_class>
+  <withSpinner(DisplayComponent)
+    data={
+      Object {
+        "item": Object {
+          "id": 1,
+        },
+        "loading": false,
+      }
+    }>
+    <DisplayComponent
+      data={
+        Object {
+          "item": Object {
+            "id": 1,
+          },
+          "loading": false,
+        }
+      }>
+      <div>
+        loading: 
+        false
+        , item: 
+        1
+      </div>
+    </DisplayComponent>
+  </withSpinner(DisplayComponent)>
+</_class>
+`;

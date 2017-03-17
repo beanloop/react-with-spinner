@@ -1,0 +1,32 @@
+{
+  "name": "react-with-spinner",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "build": "tscomp build",
+    "watch": "tscomp watch",
+    "test": "tscomp test",
+    "prepublish": "npm run build"
+  },
+  "repository": "https://github.com/beanloop/react-with-spinner.git",
+  "author": "Beanloop AB",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^19.2.2",
+    "enzyme": "^2.7.1",
+    "enzyme-to-json": "^1.5.0",
+    "jsdom": "^9.12.0",
+    "react-addons-test-utils": "^15.4.2",
+    "tscomp": "^0.9.1-dev3",
+    "tslint": "^4.0.2",
+    "tslint-config-beanloop": "^0.1.0"
+  },
+  "dependencies": {
+    "@types/react": "^15.0.16",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-toolbox": "^1.3.4",
+    "recompose": "^0.22.0"
+  }
+}
