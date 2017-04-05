@@ -165,4 +165,85 @@ describe('withSpinner', () => {
     expect(wrapper.find(ErrorComponent)).toHaveLength(0)
     expect(toJson(wrapper.first().shallow())).toMatchSnapshot()
   })
+
+  it('should support custom loading property', () => {
+    const DisplayComponent = ({result}) => <div>loading: {result.loading.toString()}, item: {result.item.id}</div>
+
+    const Component = compose(
+      WrappedComponent => class extends React.Component<any, any> {
+        state = {loading: true, item: null}
+
+        componentDidMount() {
+          // Delay setting loading to false.
+          setTimeout(() => {
+            this.setState({loading: false, item: {id: 1}})
+          }, 1000)
+        }
+
+        render() {
+          return <WrappedComponent {...this.props} result={{loading: this.state.loading, item: this.state.item}} />
+        }
+      },
+      withSpinner({prop: 'result'}),
+    )(DisplayComponent)
+
+    const wrapper = mount(<Component />)
+
+    // Should not display a Spinner
+    expect(wrapper.html()).toBeNull()
+
+    // Run timer to 100 ms since withSpinner timeout defaults to 100 ms
+    jest.runTimersToTime(100)
+    // ProgressBar should now be found
+    expect(wrapper.find(ProgressBar)).toHaveLength(1)
+    expect(wrapper.find(DisplayComponent)).toHaveLength(0)
+
+    // Run timer to 1000 ms for our own timeout
+    jest.runTimersToTime(1000)
+    // DisplayComponent should be found
+    expect(wrapper.find(DisplayComponent)).toHaveLength(1)
+    expect(wrapper.find(ProgressBar)).toHaveLength(0)
+  })
+
+  it('should support custom nested loading property', () => {
+    const DisplayComponent = ({result}) => <div>loading: {result.nested.loading.toString()}, item: {result.nested.item && result.nested.item.id}</div>
+
+    const Component = compose(
+      WrappedComponent => class extends React.Component<any, any> {
+        state = {loading: true, item: null}
+
+        componentDidMount() {
+          // Delay setting loading to false.
+          setTimeout(() => {
+            this.setState({loading: false, item: {id: 1}})
+          }, 1000)
+        }
+
+        render() {
+          // return <WrappedComponent {...this.props} data={{loading: this.state.loading, item: this.state.item}} />
+          return <WrappedComponent {...this.props} result={{nested: {loading: this.state.loading, item: this.state.item}}} />
+        }
+      },
+      withSpinner({prop: ['result', 'nested']}),
+      // withSpinner(),
+    )(DisplayComponent)
+
+    const wrapper = mount(<Component />)
+
+    // Should not display a Spinner
+    expect(wrapper.html()).toBeNull()
+
+    // Run timer to 100 ms since withSpinner timeout defaults to 100 ms
+    jest.runTimersToTime(100)
+    // ProgressBar should now be found
+    expect(wrapper.find(ProgressBar)).toHaveLength(1)
+    expect(wrapper.find(DisplayComponent)).toHaveLength(0)
+
+    // Run timer to 1000 ms for our own timeout
+    jest.runTimersToTime(1000)
+    // DisplayComponent should be found
+    expect(wrapper.find(DisplayComponent)).toHaveLength(1)
+    expect(wrapper.find(ProgressBar)).toHaveLength(0)
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
 })

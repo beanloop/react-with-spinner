@@ -1,3 +1,4 @@
+import path from 'ramda/src/path'
 import * as React from 'react'
 import {Component, ReactType} from 'react'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
@@ -11,7 +12,7 @@ export type Properties = {
    * will get rendered.
    * Defaults to 'data'.
    */
-  prop?: string
+  prop?: string|Array<string>
   /**
    * Timeout in milliseconds, the [spinnerComponent] wont get rendered
    * before the timeout.
@@ -51,6 +52,12 @@ export type Properties = {
   skipErrors?: (data: any) => boolean
 }
 
+function getDataProperty(propName: string|Array<string>, props: Properties) {
+  return Array.isArray(propName)
+        ? path(propName, props)
+        : props[propName]
+}
+
 export const withSpinner = ({
   prop = 'data', timeout = 100,
   handleError = true, partial = false,
@@ -65,9 +72,9 @@ export const withSpinner = ({
     timeout: number|null = null
 
     componentWillReceiveProps(nextProps) {
-      const data = this.props[prop]
+      const data = getDataProperty(prop, this.props)
 
-      if (!nextProps[prop] && data && (partial || !data.loading)) {
+      if (!getDataProperty(prop, nextProps) && data && (partial || !data.loading)) {
         this.timeout = null
         if (this.state.showSpinner) {
           this.setState({showSpinner: false})
@@ -76,7 +83,7 @@ export const withSpinner = ({
     }
 
     render() {
-      const data = this.props[prop]
+      const data = getDataProperty(prop, this.props)
 
       if (data && (partial || !data.loading)) {
         if (!handleError || !data.error ||

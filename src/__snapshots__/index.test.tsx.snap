@@ -60,3 +60,38 @@ exports[`withSpinner should render spinner in 100 ms and after render component 
   </withSpinner(DisplayComponent)>
 </_class>
 `;
+
+exports[`withSpinner should support custom nested loading property 1`] = `
+<_class3>
+  <withSpinner(DisplayComponent)
+    result={
+      Object {
+        "nested": Object {
+          "item": Object {
+            "id": 1,
+          },
+          "loading": false,
+        },
+      }
+    }>
+    <DisplayComponent
+      result={
+        Object {
+          "nested": Object {
+            "item": Object {
+              "id": 1,
+            },
+            "loading": false,
+          },
+        }
+      }>
+      <div>
+        loading: 
+        false
+        , item: 
+        1
+      </div>
+    </DisplayComponent>
+  </withSpinner(DisplayComponent)>
+</_class3>
+`;
