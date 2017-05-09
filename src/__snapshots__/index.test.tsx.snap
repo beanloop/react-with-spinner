@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`withSpinner should ignore errors if handleError is false 1`] = `
 <DisplayComponent
   data={
@@ -5,7 +7,8 @@ exports[`withSpinner should ignore errors if handleError is false 1`] = `
       "error": true,
       "loading": false,
     }
-  } />
+  }
+/>
 `;
 
 exports[`withSpinner should not render errorComponent if skipErrors returns true 1`] = `
@@ -40,7 +43,8 @@ exports[`withSpinner should render spinner in 100 ms and after render component 
         },
         "loading": false,
       }
-    }>
+    }
+  >
     <DisplayComponent
       data={
         Object {
@@ -49,7 +53,8 @@ exports[`withSpinner should render spinner in 100 ms and after render component 
           },
           "loading": false,
         }
-      }>
+      }
+    >
       <div>
         loading: 
         false
@@ -73,7 +78,8 @@ exports[`withSpinner should support custom nested loading property 1`] = `
           "loading": false,
         },
       }
-    }>
+    }
+  >
     <DisplayComponent
       result={
         Object {
@@ -84,7 +90,8 @@ exports[`withSpinner should support custom nested loading property 1`] = `
             "loading": false,
           },
         }
-      }>
+      }
+    >
       <div>
         loading: 
         false
