@@ -27,11 +27,47 @@ exports[`withSpinner should not render spinner if loading is false 1`] = `
 </div>
 `;
 
-exports[`withSpinner should render passed errorComponent if error exists 1`] = `<ErrorComponent />`;
+exports[`withSpinner should render a emptyComponent if data i empty 1`] = `
+<EmptyComponent
+  data={
+    Object {
+      "loading": false,
+      "value": Object {},
+    }
+  }
+/>
+`;
 
-exports[`withSpinner should render passed spinnerComponent 1`] = `<Loading />`;
+exports[`withSpinner should render passed errorComponent if error exists 1`] = `
+<ErrorComponent
+  data={
+    Object {
+      "error": true,
+      "loading": false,
+    }
+  }
+/>
+`;
 
-exports[`withSpinner should render spinner if loading is true 1`] = `<ToolboxSpinner />`;
+exports[`withSpinner should render passed spinnerComponent 1`] = `
+<Loading
+  data={
+    Object {
+      "loading": true,
+    }
+  }
+/>
+`;
+
+exports[`withSpinner should render spinner if loading is true 1`] = `
+<ToolboxSpinner
+  data={
+    Object {
+      "loading": true,
+    }
+  }
+/>
+`;
 
 exports[`withSpinner should render spinner in 100 ms and after render component 1`] = `
 <_class>

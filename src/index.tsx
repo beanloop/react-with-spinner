@@ -50,6 +50,8 @@ export type Properties = {
    * for validation errors.
    */
   skipErrors?: (data: any) => boolean
+
+  emptyComponent?: ReactType
 }
 
 function getDataProperty(propName: string|Array<string>, props: Properties) {
@@ -64,17 +66,19 @@ export const withSpinner = ({
   skipErrors, spinnerProps,
   errorComponent: ErrorComponent = null,
   spinnerComponent: Spinner = ToolboxSpinner,
+  emptyComponent: EmptyComponent = null,
 }: Properties = {}): any => WrappedComponent =>
-  class extends Component<any, {showSpinner: boolean}> {
+  class extends Component<Properties, {showSpinner: boolean}> {
     static displayName = wrapDisplayName(WrappedComponent, 'withSpinner')
 
     state = {showSpinner: false}
     timeout: number|null = null
 
     componentWillReceiveProps(nextProps) {
-      const data = getDataProperty(prop, this.props)
+      const dataProp = this.props.prop || prop
+      const data = getDataProperty(dataProp, this.props)
 
-      if (!getDataProperty(prop, nextProps) && data && (partial || !data.loading)) {
+      if (!getDataProperty(dataProp, nextProps) && data && (partial || !data.loading)) {
         this.timeout = null
         if (this.state.showSpinner) {
           this.setState({showSpinner: false})
@@ -83,17 +87,21 @@ export const withSpinner = ({
     }
 
     render() {
-      const data = getDataProperty(prop, this.props)
+      const dataProp = this.props.prop || prop
+      const data = getDataProperty(dataProp, this.props)
 
       if (data && (partial || !data.loading)) {
-        if (!handleError || !data.error ||
+        if ((Array.isArray(data) && !data.length && EmptyComponent) || !Object.keys(data).length && EmptyComponent) {
+          return EmptyComponent && <EmptyComponent {...this.props} />
+        }
+        else if (!handleError || !data.error ||
             !!(typeof skipErrors === 'function' && skipErrors(data))) {
           return <WrappedComponent {...this.props} />
         }
-        return ErrorComponent && <ErrorComponent />
+        return ErrorComponent && <ErrorComponent {...this.props} />
       }
 
-      if (this.state.showSpinner) return <Spinner {...spinnerProps} />
+      if (this.state.showSpinner) return <Spinner {...spinnerProps} {...this.props} />
 
       if (this.timeout === null) {
         this.timeout = setTimeout(() => {

@@ -246,4 +246,19 @@ describe('withSpinner', () => {
     expect(wrapper.find(ProgressBar)).toHaveLength(0)
     expect(toJson(wrapper)).toMatchSnapshot()
   })
+
+  it('should render a emptyComponent if data i empty', () => {
+    const EmptyComponent = () => <span>No data...</span>
+
+    const Component = compose(
+      WrappedComponent => props => <WrappedComponent {...props} data={{loading: false, value: {}}} />,
+      withSpinner({emptyComponent: EmptyComponent, prop: ['data', 'value']}),
+    )(null)
+
+    const wrapper = shallow(<Component />).first().shallow()
+    jest.runTimersToTime(100)
+
+    expect(wrapper.find(EmptyComponent)).toHaveLength(1)
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
 })
