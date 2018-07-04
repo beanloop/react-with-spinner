@@ -1,10 +1,7 @@
 import path from 'ramda/src/path'
 import * as React from 'react'
 import {Component, ReactType} from 'react'
-import ProgressBar from 'react-toolbox/lib/progress_bar'
 import wrapDisplayName from 'recompose/wrapDisplayName'
-
-const ToolboxSpinner = props => <ProgressBar {...props} />
 
 export type Properties = {
   /**
@@ -38,7 +35,7 @@ export type Properties = {
    * Component that should be rendered while loading.
    * Defaults to a React Toolbox ProgressBar component.
    */
-  spinnerComponent?: ReactType
+  spinnerComponent: ReactType
   /**
    * Extra props that should be passed to the [spinnerComponent].
    */
@@ -65,9 +62,9 @@ export const withSpinner = ({
   handleError = true, partial = false,
   skipErrors, spinnerProps,
   errorComponent: ErrorComponent = null,
-  spinnerComponent: Spinner = ToolboxSpinner,
+  spinnerComponent: Spinner,
   emptyComponent: EmptyComponent = null,
-}: Properties = {}): any => WrappedComponent =>
+}: Properties): any => WrappedComponent =>
   class extends Component<Properties, {showSpinner: boolean}> {
     static displayName = wrapDisplayName(WrappedComponent, 'withSpinner')
 
