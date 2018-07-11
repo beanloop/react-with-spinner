@@ -60,7 +60,7 @@ exports[`withSpinner should render passed spinnerComponent 1`] = `
 `;
 
 exports[`withSpinner should render spinner if loading is true 1`] = `
-<ToolboxSpinner
+<Loading
   data={
     Object {
       "loading": true,
