@@ -101,7 +101,7 @@ export const withSpinner = ({
       if (this.state.showSpinner) return <Spinner {...spinnerProps} {...this.props} />
 
       if (this.timeout === null) {
-        this.timeout = setTimeout(() => {
+        this.timeout = window.setTimeout(() => {
           this.setState({showSpinner: true})
         }, timeout)
       }
