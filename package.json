@@ -3,6 +3,7 @@
   "version": "0.4.0",
   "description": "",
   "main": "dist/src/index.js",
+  "types": "",
   "scripts": {
     "build": "tscomp build",
     "watch": "tscomp watch",
@@ -13,10 +14,15 @@
   "author": "Beanloop AB",
   "license": "MIT",
   "devDependencies": {
+    "@types/cheerio": "^0.22.8",
     "@types/jest": "^19.2.3",
+    "@types/ramda": "^0.25.36",
     "@types/react": "^16.4.8",
-    "enzyme": "^2.7.1",
-    "enzyme-to-json": "^1.5.0",
+    "@types/recompose": "^0.26.4",
+    "enzyme": "^3.4.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-adapter-react-16.3": "^1.0.0",
+    "enzyme-to-json": "^3.3.4",
     "jsdom": "^9.12.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
@@ -24,14 +30,15 @@
     "react-dom": "^16.4.2",
     "tscomp": "^0.9.1",
     "tslint": "^4.0.2",
-    "tslint-config-beanloop": "^0.1.0"
+    "tslint-config-beanloop": "^0.1.0",
+    "typescript": "^3.0.1"
   },
   "dependencies": {
     "ramda": "^0.23.0",
     "recompose": "^0.22.0"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0",
-    "prop-types": "^15.6.2"
+    "prop-types": "^15.6.2",
+    "react": "^15.0.0 || ^16.0.0"
   }
 }
