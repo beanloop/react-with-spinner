@@ -25,7 +25,7 @@ export type Properties = {
    * Component to be rendered if an error occurs.
    * Defaults to null.
    */
-  errorComponent?: ReactType
+  errorComponent?: React.ComponentType
   /**
    * If the HOC should take partial data into account.
    * Defaults to false.
@@ -35,7 +35,7 @@ export type Properties = {
    * Component that should be rendered while loading.
    * Defaults to a React Toolbox ProgressBar component.
    */
-  spinnerComponent: ReactType
+  spinnerComponent: React.ComponentType
   /**
    * Extra props that should be passed to the [spinnerComponent].
    */
