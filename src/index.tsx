@@ -64,7 +64,7 @@ export const withSpinner = ({
   errorComponent: ErrorComponent = null,
   spinnerComponent: Spinner,
   emptyComponent: EmptyComponent = null,
-}: Properties): any => WrappedComponent =>
+}: Properties) => (WrappedComponent: React.ComponentType): React.ComponentType =>
   class extends Component<Properties, {showSpinner: boolean}> {
     static displayName = wrapDisplayName(WrappedComponent, 'withSpinner')
 
