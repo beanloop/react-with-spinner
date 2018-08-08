@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "",
   "main": "dist/src/index.js",
-  "types": "",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tscomp build",
     "watch": "tscomp watch",
