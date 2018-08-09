@@ -25,7 +25,7 @@ export type Properties = {
    * Component to be rendered if an error occurs.
    * Defaults to null.
    */
-  errorComponent?: ReactType
+  errorComponent?: React.ComponentType
   /**
    * If the HOC should take partial data into account.
    * Defaults to false.
@@ -35,7 +35,7 @@ export type Properties = {
    * Component that should be rendered while loading.
    * Defaults to a React Toolbox ProgressBar component.
    */
-  spinnerComponent: ReactType
+  spinnerComponent: React.ComponentType
   /**
    * Extra props that should be passed to the [spinnerComponent].
    */
@@ -64,7 +64,7 @@ export const withSpinner = ({
   errorComponent: ErrorComponent = null,
   spinnerComponent: Spinner,
   emptyComponent: EmptyComponent = null,
-}: Properties): any => WrappedComponent =>
+}: Properties) => (WrappedComponent: React.ComponentType): React.ComponentType =>
   class extends Component<Properties, {showSpinner: boolean}> {
     static displayName = wrapDisplayName(WrappedComponent, 'withSpinner')
 
@@ -101,7 +101,7 @@ export const withSpinner = ({
       if (this.state.showSpinner) return <Spinner {...spinnerProps} {...this.props} />
 
       if (this.timeout === null) {
-        this.timeout = setTimeout(() => {
+        this.timeout = window.setTimeout(() => {
           this.setState({showSpinner: true})
         }, timeout)
       }

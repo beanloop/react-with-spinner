@@ -1,4 +1,8 @@
+import {configure} from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16.3'
 import {jsdom} from 'jsdom'
+
+configure({adapter: new Adapter()})
 
 declare const global
 
