@@ -51,6 +51,8 @@ export type Properties = {
   emptyComponent?: ReactType
 }
 
+const DefaultSpinner = () => <div>Loading...</div>
+
 function getDataProperty(propName: string|Array<string>, props: Properties) {
   return Array.isArray(propName)
         ? path(propName, props)
@@ -60,11 +62,11 @@ function getDataProperty(propName: string|Array<string>, props: Properties) {
 export const withSpinner = ({
   prop = 'data', timeout = 100,
   handleError = true, partial = false,
-  skipErrors, spinnerProps,
+  skipErrors = false, spinnerProps = {},
   errorComponent: ErrorComponent = null,
-  spinnerComponent: Spinner,
+  spinnerComponent: Spinner = DefaultSpinner,
   emptyComponent: EmptyComponent = null,
-}: Properties): any => WrappedComponent =>
+}: Properties = {} as Properties): any => WrappedComponent =>
   class extends Component<Properties, {showSpinner: boolean}> {
     static displayName = wrapDisplayName(WrappedComponent, 'withSpinner')
 
@@ -101,7 +103,7 @@ export const withSpinner = ({
       if (this.state.showSpinner) return <Spinner {...spinnerProps} {...this.props} />
 
       if (this.timeout === null) {
-        this.timeout = setTimeout(() => {
+        this.timeout = window.setTimeout(() => {
           this.setState({showSpinner: true})
         }, timeout)
       }

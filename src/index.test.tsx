@@ -11,6 +11,22 @@ const Loading = () => <span>Loading...</span>
 jest.useFakeTimers()
 
 describe('withSpinner', () => {
+  it('should work without any args', () => {
+    const Component = compose(
+      WrappedComponent => props => <WrappedComponent {...props} data={{loading: true}} />,
+      withSpinner(),
+    )(() => <div></div>)
+
+    const wrapper = shallow(<Component />).first().shallow()
+
+    expect(wrapper.type()).toBeNull()
+
+    // Run timer so it passes withSpinner timeout
+    jest.runTimersToTime(100)
+    wrapper.update()
+
+    expect(toJson(wrapper)).toMatchSnapshot()
+  })
   it('should render spinner if loading is true', () => {
     const Component = compose(
       WrappedComponent => props => <WrappedComponent {...props} data={{loading: true}} />,

@@ -138,3 +138,13 @@ exports[`withSpinner should support custom nested loading property 1`] = `
   </withSpinner(DisplayComponent)>
 </_class3>
 `;
+
+exports[`withSpinner should work without any args 1`] = `
+<DefaultSpinner
+  data={
+    Object {
+      "loading": true,
+    }
+  }
+/>
+`;
