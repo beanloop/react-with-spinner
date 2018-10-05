@@ -22,10 +22,11 @@ it will render a `Spinner`.
 ```typescript
 import compose from 'recompose/compose'
 import {withSpinner} from 'react-with-spinner'
+const Loading = () => <span>Loading...</span>
 
 const Component = compose(
   WrappedComponent => props => <WrappedComponent {...props} data={{loading: true}} />,
-  withSpinner({spinnerComponent: SomeCustomSpinnerConponent}),
+  withSpinner({spinnerComponent: Loading}),
 )(() => <div></div>)
 
 ```
