@@ -15,10 +15,12 @@ describe('withSpinner', () => {
   it('should render spinner if loading is true', () => {
     const Component = compose<any, {}>(
       defaultProps({data: {loading: true}}),
-      withSpinner({spinnerComponent: Loading}),
-    )(() => <div></div>)
+      withSpinner({spinnerComponent: Loading})
+    )(() => <div />)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
 
     expect(wrapper.type()).toBeNull()
 
@@ -32,34 +34,48 @@ describe('withSpinner', () => {
   it('should not render spinner if loading is false', () => {
     const Component = compose<any, {}>(
       defaultProps({data: {loading: false}}),
-      withSpinner({spinnerComponent: Loading}),
+      withSpinner({spinnerComponent: Loading})
     )(({data}) => <div>loading: {data.loading.toString()}</div>)
 
-    const wrapper = shallow(<Component />).first().shallow().first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
+      .first()
+      .shallow()
     wrapper.update()
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   it('should render spinner in 100 ms and after render component', () => {
-    const DisplayComponent = ({data}) => <div>loading: {data.loading.toString()}, item: {data.item.id}</div>
+    const DisplayComponent = ({data}: any) => (
+      <div>
+        loading: {data.loading.toString()}, item: {data.item.id}
+      </div>
+    )
 
     const Component = compose<any, {}>(
-      WrappedComponent => class extends React.Component<any, any> {
-        state = {loading: true, item: null}
+      (WrappedComponent: React.ComponentType<any>) =>
+        class extends React.Component<any, any> {
+          state = {loading: true, item: null}
 
-        componentDidMount() {
-          // Delay setting loading to false.
-          setTimeout(() => {
-            this.setState({loading: false, item: {id: 1}})
-          }, 1000)
-        }
+          componentDidMount() {
+            // Delay setting loading to false.
+            setTimeout(() => {
+              this.setState({loading: false, item: {id: 1}})
+            }, 1000)
+          }
 
-        render() {
-          return <WrappedComponent {...this.props} data={{loading: this.state.loading, item: this.state.item}} />
-        }
-      },
-      withSpinner({spinnerComponent: Loading}),
+          render() {
+            return (
+              <WrappedComponent
+                {...this.props}
+                data={{loading: this.state.loading, item: this.state.item}}
+              />
+            )
+          }
+        },
+      withSpinner({spinnerComponent: Loading})
     )(DisplayComponent)
 
     let wrapper = mount(<Component />)
@@ -89,24 +105,32 @@ describe('withSpinner', () => {
 
     const Component = compose(
       defaultProps({data: {loading: true}}),
-      withSpinner({spinnerComponent: Loading}),
-    )(null)
+      withSpinner({spinnerComponent: Loading})
+    )(null as any)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
     jest.runTimersToTime(100)
 
     expect(toJson(wrapper)).toMatchSnapshot()
   })
 
   it('should ignore errors if handleError is false', () => {
-    const DisplayComponent = ({data}) => <div>loading: {data.loading.toString()}, item: {data.item.id}</div>
+    const DisplayComponent = ({data}: any) => (
+      <div>
+        loading: {data.loading.toString()}, item: {data.item.id}
+      </div>
+    )
 
     const Component = compose<any, {}>(
       defaultProps({data: {loading: false, error: true}}),
-      withSpinner({spinnerComponent: Loading, handleError: false}),
+      withSpinner({spinnerComponent: Loading, handleError: false})
     )(DisplayComponent)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
     jest.runTimersToTime(100)
 
     expect(toJson(wrapper)).toMatchSnapshot()
@@ -117,10 +141,12 @@ describe('withSpinner', () => {
 
     const Component = compose(
       defaultProps({data: {loading: false, error: true}}),
-      withSpinner({spinnerComponent: Loading, errorComponent: ErrorComponent}),
-    )(null)
+      withSpinner({spinnerComponent: Loading, errorComponent: ErrorComponent})
+    )(null as any)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
     jest.runTimersToTime(100)
 
     expect(wrapper.find(ErrorComponent)).toHaveLength(1)
@@ -128,14 +154,20 @@ describe('withSpinner', () => {
   })
 
   it('should delay rendering of spinnerComponent the timeout that is passed', () => {
-    const DisplayComponent = ({data}) => <div>loading: {data.loading.toString()}, item: {data.item.id}</div>
+    const DisplayComponent = ({data}: any) => (
+      <div>
+        loading: {data.loading.toString()}, item: {data.item.id}
+      </div>
+    )
 
     const Component = compose<any, {}>(
       defaultProps({data: {loading: true}}),
-      withSpinner({spinnerComponent: Loading, timeout: 500}),
+      withSpinner({spinnerComponent: Loading, timeout: 500})
     )(DisplayComponent)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
 
     // Run timer to a time before our timeout
     jest.runTimersToTime(400)
@@ -143,25 +175,44 @@ describe('withSpinner', () => {
 
     // Run timer over our timeout
     jest.runTimersToTime(600)
-    expect(wrapper.first().shallow().getElement()).toEqual(Loading())
+    expect(
+      wrapper
+        .first()
+        .shallow()
+        .getElement()
+    ).toEqual(Loading())
   })
 
   it('should not render errorComponent if skipErrors returns true', () => {
-    const validationError = {validationError: {field: 'password', message: 'Wrong password'}}
+    const validationError = {
+      validationError: {field: 'password', message: 'Wrong password'},
+    }
     const ErrorComponent = () => <span>An unknown error occured...</span>
-    const DisplayComponent = ({data: {error}}) => <div>
-      Validation error occured on field: {error.validationError.field} with message: {error.validationError.message}
-    </div>
+    const DisplayComponent = ({
+      data: {error},
+    }: {
+      data: {error: {validationError: {field: any; message: string}}}
+    }) => (
+      <div>
+        Validation error occured on field: {error.validationError.field} with
+        message: {error.validationError.message}
+      </div>
+    )
 
     const Component = compose<any, {}>(
       defaultProps({data: {loading: false, error: validationError}}),
-      withSpinner(({spinnerComponent: Loading,
+      withSpinner({
+        spinnerComponent: Loading,
         errorComponent: ErrorComponent,
-        skipErrors: data => data.error.validationError && data.error.validationError.field === 'password'
-      })),
+        skipErrors: data =>
+          data.error.validationError &&
+          data.error.validationError.field === 'password',
+      })
     )(DisplayComponent)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
     jest.runTimersToTime(100)
 
     expect(wrapper.find(ErrorComponent)).toHaveLength(0)
@@ -169,24 +220,38 @@ describe('withSpinner', () => {
   })
 
   it('should support custom loading property', () => {
-    const DisplayComponent = ({result}) => <div>loading: {result.loading.toString()}, item: {result.item.id}</div>
+    const DisplayComponent = ({
+      result,
+    }: {
+      result: {loading: boolean; item: {id: number}}
+    }) => (
+      <div>
+        loading: {result.loading.toString()}, item: {result.item.id}
+      </div>
+    )
 
     const Component = compose<any, {}>(
-      WrappedComponent => class extends React.Component<any, any> {
-        state = {loading: true, item: null}
+      (WrappedComponent: React.ComponentType<any>) =>
+        class extends React.Component<any, any> {
+          state = {loading: true, item: null}
 
-        componentDidMount() {
-          // Delay setting loading to false.
-          setTimeout(() => {
-            this.setState({loading: false, item: {id: 1}})
-          }, 1000)
-        }
+          componentDidMount() {
+            // Delay setting loading to false.
+            setTimeout(() => {
+              this.setState({loading: false, item: {id: 1}})
+            }, 1000)
+          }
 
-        render() {
-          return <WrappedComponent {...this.props} result={{loading: this.state.loading, item: this.state.item}} />
-        }
-      },
-      withSpinner({spinnerComponent: Loading, prop: 'result'}),
+          render() {
+            return (
+              <WrappedComponent
+                {...this.props}
+                result={{loading: this.state.loading, item: this.state.item}}
+              />
+            )
+          }
+        },
+      withSpinner({spinnerComponent: Loading, prop: 'result'})
     )(DisplayComponent)
 
     let wrapper = mount(<Component />)
@@ -210,25 +275,42 @@ describe('withSpinner', () => {
   })
 
   it('should support custom nested loading property', () => {
-    const DisplayComponent = ({result}) => <div>loading: {result.nested.loading.toString()}, item: {result.nested.item && result.nested.item.id}</div>
+    const DisplayComponent = ({
+      result,
+    }: {
+      result: {nested: {loading: boolean; item: {id: number}}}
+    }) => (
+      <div>
+        loading: {result.nested.loading.toString()}, item:{' '}
+        {result.nested.item && result.nested.item.id}
+      </div>
+    )
 
     const Component = compose<any, {}>(
-      WrappedComponent => class extends React.Component<any, any> {
-        state = {loading: true, item: null}
+      (WrappedComponent: React.ComponentType<any>) =>
+        class extends React.Component<any, any> {
+          state = {loading: true, item: null}
 
-        componentDidMount() {
-          // Delay setting loading to false.
-          setTimeout(() => {
-            this.setState({loading: false, item: {id: 1}})
-          }, 1000)
-        }
+          componentDidMount() {
+            // Delay setting loading to false.
+            setTimeout(() => {
+              this.setState({loading: false, item: {id: 1}})
+            }, 1000)
+          }
 
-        render() {
-          // return <WrappedComponent {...this.props} data={{loading: this.state.loading, item: this.state.item}} />
-          return <WrappedComponent {...this.props} result={{nested: {loading: this.state.loading, item: this.state.item}}} />
-        }
-      },
-      withSpinner({spinnerComponent: Loading, prop: ['result', 'nested']}),
+          render() {
+            // return <WrappedComponent {...this.props} data={{loading: this.state.loading, item: this.state.item}} />
+            return (
+              <WrappedComponent
+                {...this.props}
+                result={{
+                  nested: {loading: this.state.loading, item: this.state.item},
+                }}
+              />
+            )
+          }
+        },
+      withSpinner({spinnerComponent: Loading, prop: ['result', 'nested']})
       // withSpinner(),
     )(DisplayComponent)
 
@@ -258,10 +340,16 @@ describe('withSpinner', () => {
 
     const Component = compose(
       defaultProps({data: {loading: false, value: {}}}),
-      withSpinner({spinnerComponent: Loading, emptyComponent: EmptyComponent, prop: ['data', 'value']}),
-    )(null)
+      withSpinner({
+        spinnerComponent: Loading,
+        emptyComponent: EmptyComponent,
+        prop: ['data', 'value'],
+      })
+    )(null as any)
 
-    const wrapper = shallow(<Component />).first().shallow()
+    const wrapper = shallow(<Component />)
+      .first()
+      .shallow()
     jest.runTimersToTime(100)
 
     expect(wrapper.find(EmptyComponent)).toHaveLength(1)

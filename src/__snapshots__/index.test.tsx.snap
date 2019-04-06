@@ -70,7 +70,7 @@ exports[`withSpinner should render spinner if loading is true 1`] = `
 `;
 
 exports[`withSpinner should render spinner in 100 ms and after render component 1`] = `
-<_class>
+<class_1>
   <withSpinner(DisplayComponent)
     data={
       Object {
@@ -99,11 +99,11 @@ exports[`withSpinner should render spinner in 100 ms and after render component 
       </div>
     </DisplayComponent>
   </withSpinner(DisplayComponent)>
-</_class>
+</class_1>
 `;
 
 exports[`withSpinner should support custom nested loading property 1`] = `
-<_class3>
+<class_3>
   <withSpinner(DisplayComponent)
     result={
       Object {
@@ -131,10 +131,11 @@ exports[`withSpinner should support custom nested loading property 1`] = `
       <div>
         loading: 
         false
-        , item: 
+        , item:
+         
         1
       </div>
     </DisplayComponent>
   </withSpinner(DisplayComponent)>
-</_class3>
+</class_3>
 `;
