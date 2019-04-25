@@ -1,9 +1,9 @@
 {
   "name": "react-with-spinner",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "React HOC for displaying a Spinner component while loading.",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "microbundle build",
     "watch": "microbundle watch",
     "test": "jest test",
@@ -13,6 +13,15 @@
   "main": "dist/react-with-spinner.js",
   "umd:main": "dist/react-with-spinner.umd.js",
   "module": "dist/react-with-spinner.es.js",
+  "types": "dist/",
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE-APACHE",
+    "LICENSE-MIT",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "repository": "https://github.com/beanloop/react-with-spinner.git",
   "author": "Beanloop AB",
   "license": "MIT",
