@@ -1,0 +1,85 @@
+---
+name: Examples
+---
+
+import compose from "recompose/compose";
+import {useState, useEffect} from 'react';
+import defaultProps from "recompose/defaultProps";
+import {withSpinner} from "../src/index.tsx";
+import {PropsTable, Playground} from "docz";
+
+# withSpinner
+
+## Properties
+
+<PropsTable of={withSpinner} />
+
+## Basic usage
+
+<Playground>
+{() => {
+		const Loading = () => <span>Loading...</span>;
+
+		const Component = compose(
+      defaultProps({data: {loading: true}}),
+			withSpinner({spinnerComponent: Loading}),
+    )(() => <div></div>)
+
+    return (
+    		<Component />
+    )
+}}
+</Playground>
+
+## Not loading
+
+<Playground>
+{() => {
+		const Loading = () => <span>Loading...</span>;
+
+		const Component = compose(
+      defaultProps({data: {loading: false}}),
+			withSpinner({spinnerComponent: Loading}),
+    )(() => <div>Done loading!</div>)
+
+    return (
+    		<Component />
+    )
+}}
+</Playground>
+
+## After time
+
+<Playground>
+{() => {
+		const Loading = () => <span>Loading...</span>
+    const DisplayComponent = ({data}) => <div>loading: {data.loading.toString()}, item: {data.item.id}</div>
+
+	  function Parent(WrappedComponent) {
+			const [loading, setLoading] = useState(true)
+			const [item, setItem] = useState(null)
+
+			useEffect(() => {
+				const timeoutId = setTimeout(() => {
+					setItem({id: 1})
+					setLoading(false)
+				}, 3000)
+
+				return function cleanup() {
+					clearTimeout(timeoutId)
+				}
+			});
+
+			return <WrappedComponent data={{loading, item}} />
+		}
+
+		const Component = compose(
+      WrappedComponent => () => Parent(WrappedComponent),
+      withSpinner({spinnerComponent: Loading}),
+    )(DisplayComponent)
+
+		return (
+			<Component />
+		)
+}}
+</Playground>

@@ -1,6 +1,6 @@
 import path from 'ramda/src/path'
 import * as React from 'react'
-import {Component, ReactType} from 'react'
+import {Component} from 'react'
 import wrapDisplayName from 'recompose/wrapDisplayName'
 
 export type Properties = {
@@ -9,7 +9,7 @@ export type Properties = {
    * will get rendered.
    * Defaults to 'data'.
    */
-  prop?: string|Array<string>
+  prop?: string | Array<string>
   /**
    * Timeout in milliseconds, the [spinnerComponent] wont get rendered
    * before the timeout.
@@ -25,7 +25,7 @@ export type Properties = {
    * Component to be rendered if an error occurs.
    * Defaults to null.
    */
-  errorComponent?: React.ComponentType
+  errorComponent?: React.ComponentType<any> | null
   /**
    * If the HOC should take partial data into account.
    * Defaults to false.
@@ -35,7 +35,7 @@ export type Properties = {
    * Component that should be rendered while loading.
    * Defaults to a React Toolbox ProgressBar component.
    */
-  spinnerComponent: React.ComponentType
+  spinnerComponent: React.ComponentType<any>
   /**
    * Extra props that should be passed to the [spinnerComponent].
    */
@@ -48,34 +48,42 @@ export type Properties = {
    */
   skipErrors?: (data: any) => boolean
 
-  emptyComponent?: ReactType
+  emptyComponent?: React.ComponentType<any> | null
 }
 
-function getDataProperty(propName: string|Array<string>, props: Properties) {
-  return Array.isArray(propName)
-        ? path(propName, props)
-        : props[propName]
+function getDataProperty(
+  propName: string | Array<string>,
+  props: Properties & any
+) {
+  return Array.isArray(propName) ? path(propName, props) : props[propName]
 }
 
 export const withSpinner = ({
-  prop = 'data', timeout = 100,
-  handleError = true, partial = false,
-  skipErrors, spinnerProps,
+  prop = 'data',
+  timeout = 100,
+  handleError = true,
+  partial = false,
+  skipErrors,
+  spinnerProps,
   errorComponent: ErrorComponent = null,
   spinnerComponent: Spinner,
   emptyComponent: EmptyComponent = null,
-}: Properties) => (WrappedComponent: React.ComponentType): React.ComponentType =>
+}: Properties) => (WrappedComponent: React.ComponentType) =>
   class extends Component<Properties, {showSpinner: boolean}> {
     static displayName = wrapDisplayName(WrappedComponent, 'withSpinner')
 
     state = {showSpinner: false}
-    timeout: number|null = null
+    timeout: number | null = null
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: Properties) {
       const dataProp = this.props.prop || prop
       const data = getDataProperty(dataProp, this.props)
 
-      if (!getDataProperty(dataProp, nextProps) && data && (partial || !data.loading)) {
+      if (
+        !getDataProperty(dataProp, nextProps) &&
+        data &&
+        (partial || !data.loading)
+      ) {
         this.timeout = null
         if (this.state.showSpinner) {
           this.setState({showSpinner: false})
@@ -88,22 +96,30 @@ export const withSpinner = ({
       const data = getDataProperty(dataProp, this.props)
 
       if (data && (partial || !data.loading)) {
-        if ((Array.isArray(data) && !data.length && EmptyComponent) || !Object.keys(data).length && EmptyComponent) {
+        if (
+          (Array.isArray(data) && !data.length && EmptyComponent) ||
+          (!Object.keys(data).length && EmptyComponent)
+        ) {
           return EmptyComponent && <EmptyComponent {...this.props} />
-        }
-        else if (!handleError || !data.error ||
-            !!(typeof skipErrors === 'function' && skipErrors(data))) {
+        } else if (
+          !handleError ||
+          !data.error ||
+          !!(typeof skipErrors === 'function' && skipErrors(data))
+        ) {
           return <WrappedComponent {...this.props} />
         }
         return ErrorComponent && <ErrorComponent {...this.props} />
       }
 
-      if (this.state.showSpinner) return <Spinner {...spinnerProps} {...this.props} />
+      if (this.state.showSpinner)
+        return <Spinner {...spinnerProps} {...this.props} />
 
       if (this.timeout === null) {
-        this.timeout = window.setTimeout(() => {
+        const timeoutId: number & any = setTimeout(() => {
           this.setState({showSpinner: true})
         }, timeout)
+
+        this.timeout = timeoutId
       }
       return null
     }
